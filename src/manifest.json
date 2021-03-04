@@ -4,7 +4,8 @@
   "description": "Bloqueador de anúncios experimental",
   "permissions": ["webRequest", "webRequestBlocking", "http://*/", "https://*/"],
   "background": {
-    "scripts": ["blocked_domains.js", "background.js"]
+    "scripts": ["blocked_domains.js", "background.js"],
+    "persistent": true
   },
   "manifest_version": 1,
 }
