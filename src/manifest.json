@@ -1,10 +1,10 @@
 {
-  "name": "Block Block Block",
+  "name": "Tatu Blocker",
   "version": "0.1",
   "description": "Bloqueador de anúncios experimental",
-  "permissions": ["webRequest", "webRequestBlocking", "http://*/", "https://*/"],
+  "permissions": ["webRequest", "webRequestBlocking", "tabs", "webNavigation", "http://*/", "https://*/"],
   "background": {
-    "scripts": ["blocked_domains.js", "background.js"],
+    "scripts": ["blocked_domains.js", "background.js","blocked_cosmetic.js"],
     "persistent": true
   },
   "page_action": {
