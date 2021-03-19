@@ -8254,4 +8254,6 @@ var blocked_classes = [
 	"zoneAds"
 	];	
 
-hideAds();
+setInterval(function () {
+	hideAds();
+},1000)
