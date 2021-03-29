@@ -20,6 +20,27 @@ chrome.webRequest.onBeforeRequest.addListener(
 				}
 			}
 		}	
+		
+		//checagem de se a url da request é a mesma da aba, para bloquear os cookies de terceiros
+		chrome.tabs.query({currentWindow: true}, tabs => {
+			let url = tabs[0].url;
+			if (url.includes(domain) == true) {
+				chrome.contentSettings.cookies.set({
+				primaryPattern: domain,
+				secondaryPattern: domain,
+				setting: 'block'
+				})
+			}
+			else {
+				chrome.contentSettings.cookies.set({
+				primaryPattern: domain,
+				secondaryPattern: domain,
+				setting: 'allow'
+				})
+			}
+		});
+
+	
 	},
 	{urls: ["<all_urls>"]},
 	["blocking"]
