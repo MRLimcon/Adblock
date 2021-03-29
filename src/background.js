@@ -27,13 +27,13 @@ chrome.webRequest.onBeforeRequest.addListener(
 			if (url.includes(domain) == true) {
 				chrome.contentSettings.cookies.set({
 				primaryPattern: "*//"+domain+"/*",
-				setting: 'Allow'
+				setting: 'allow'
 				})
 			}
 			else {
 				chrome.contentSettings.cookies.set({
 				primaryPattern: "*//"+domain+"/*",
-				setting: 'Block'
+				setting: 'block'
 				})
 			}
 		});
