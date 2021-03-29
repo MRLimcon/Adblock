@@ -26,16 +26,14 @@ chrome.webRequest.onBeforeRequest.addListener(
 			let url = tabs[0].url;
 			if (url.includes(domain) == true) {
 				chrome.contentSettings.cookies.set({
-				primaryPattern: domain,
-				secondaryPattern: domain,
-				setting: 'block'
+				primaryPattern: "*//"+domain+"/*",
+				setting: 'Allow'
 				})
 			}
 			else {
 				chrome.contentSettings.cookies.set({
-				primaryPattern: domain,
-				secondaryPattern: domain,
-				setting: 'allow'
+				primaryPattern: "*//"+domain+"/*",
+				setting: 'Block'
 				})
 			}
 		});
