@@ -2,7 +2,7 @@
   "name": "Tatu Blocker",
   "version": "0.1",
   "description": "Bloqueador de anúncios experimental",
-  "permissions": ["webRequest", "webRequestBlocking", "http://*/*", "https://*/*", "tabs", "webNavigation", "notifications"],
+  "permissions": ["contentSettings", "webRequest", "webRequestBlocking", "<all_urls>", "tabs", "webNavigation", "notifications"],
   "background": {
     "scripts": [
       "blocked_domains.js",
