@@ -35,7 +35,6 @@ chrome.webRequest.onBeforeRequest.addListener(
 				primaryPattern: "*//"+domain+"/*",
 				setting: 'block'
 				})
-				alert(domain);
 			}
 		});
 
