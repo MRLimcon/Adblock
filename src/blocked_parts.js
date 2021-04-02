@@ -14,7 +14,6 @@ var blocked_parts = [
     "advertise",
     "/_get_ads",
     "adunit",
-    "/ad",
     "adservice.",
     "ads.",
     "adPlacements",
