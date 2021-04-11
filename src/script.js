@@ -10,7 +10,6 @@ function hideAds() {
 				//excluindo todo o script e escondendo ele
 				scripts[i].setAttribute("style", "display: none !important;");
 				scripts[i].innerHTML = " ";
-				alert("teste")
 			}
 		}
 	}
