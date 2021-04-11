@@ -7,7 +7,8 @@
       "cookies",
       "webRequest", 
       "webRequestBlocking", 
-      "<all_urls>", 
+      "<all_urls>",
+      "privacy",
       "tabs", 
       "webNavigation", 
       "notifications"
@@ -18,14 +19,9 @@
       "blocked_parts.js", 
       "background.js", 
       "blocked_cosmetic.js",
-      "blocked_js.js"
-    ],
-    "content_scripts": [{
-      "matches": ["*://*/*"],
-      "all_frames": true,
-      "js": ["script.js"]
-      }],
-    "persistent": true
+      "blocked_js.js",
+      "script.js"
+    ]
   },
   "browser_action": {
     "default_popup": "popup.html"
