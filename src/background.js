@@ -7,7 +7,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 		//é pego o dominio e a url para checar o dominio (blocked_domains.js)
 		// e para bloquear parte do site (blocked_parts.js)
 		var domain = details.url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
-		var part_check = details.url
+		var part_check = details.url;
 		
 		//checagem e bloqueio, caso esteja nos dominios bloqueados
 		if (blocked_domains.includes(domain)) {
@@ -46,9 +46,31 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 /* caso o html esteja pronto pra rodar, é colocado um listener para rodar um script
 de conteúdo para checar o html*/
-chrome.webNavigation.onCommitted.addListener(function (tab) {
-	//colocar sendmessage aqui
-	chrome.tabs.executeScript(tab.ib, {
-		file: 'script.js'
-	});
+
+function scanTabs(tab) {
+	chrome.tabs.executeScript(tab.id, {
+		file: 'script.js',
+		runAt: "document_idle",
+		allFrames: true
+	})
+};
+
+chrome.tabs.onUpdated.addListener(scanTabs);
+chrome.tabs.onCreated.addListener(scanTabs);
+
+/*
+para enviar a mensagem para o content script: não está dando para ler o blocked_js e essas coisas
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+	if (message == "js") {
+		sendResponse(sender,blocked_js);
+	} else if (message == "classes") {
+		sendResponse(sender,blocked_classes);
+	} else if (message == "ids") {
+		sendResponse(sender,blocked_ids);
+	} else if (message == "adunit") {
+		sendResponse(sender,blocked_adunit);
+		alert(blocked_adunit)
+	}
 });
+*/
