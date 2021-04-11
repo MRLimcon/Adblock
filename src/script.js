@@ -5,10 +5,13 @@ function hideAds() {
 	//e analisa para ver se contém algo que vai lançar anuncios
 	for (let i = 0; i < scripts.length; i++) {
 		//criar lista de elementos de anuncio e colocar algoritmo aqui
-		if (scripts[i].innerHTML.includes("adPlacements") == true || scripts[i].innerHTML.includes("playerAds") == true) {
-			//excluindo todo o script e escondendo ele
-			scripts[i].setAttribute("style", "display: none;");
-			scripts[i].innerHTML = " "
+		for (let k = 0; k < blocked_js.length; k++) {
+			if (scripts[i].innerHTML.includes(blocked_js[k]) == true) {
+				//excluindo todo o script e escondendo ele
+				scripts[i].setAttribute("style", "display: none !important;");
+				scripts[i].innerHTML = " ";
+				alert("teste")
+			}
 		}
 	}
 
@@ -16,11 +19,12 @@ function hideAds() {
 	// que tem nome de anuncio (blocked_cosmetic.js)
 	let divs = document.getElementsByTagName("div");
 	//criar lista de elementos com nome de anuncio e colocar algoritmo aqui
-	let adunit = document.getElementsByTagName("adunit","ytd-display-ad-renderer","ytd-carousel-ad-renderer","ytd-promoted-sparkles-web-renderer");
-
-	//os que tem nome de anuncio sao bloqueados
-	for (let i = 0; i < adunit.length; i++) {
-		adunit[i].setAttribute("style", "display: none;");
+	for (let k = 0; k < blocked_adunit.length; k++) {
+		let adunit = document.getElementsByTagName(blocked_adunit[k]);
+		//os que tem nome de anuncio sao bloqueados
+		for (let i = 0; i < adunit.length; i++) {
+			adunit[i].setAttribute("style", "display: none !important;");
+		}
 	}
 
 	//os anuncios sao analisados
@@ -29,12 +33,59 @@ function hideAds() {
 		let classes = divs[i].getAttribute('class');
 		//se o id ou a classe do div estao nas listas de bloqueio, eles sao bloqueados
 		if (blocked_ids.includes(id) == true || blocked_classes.includes(classes) == true) {
-			divs[i].setAttribute("style", "display: none;");
+			divs[i].setAttribute("style", "display: none !important;");
 		}
 	}
 }
 
-//colocar receive message aqui
+/*
+para o envio das variáveis
+var blocked_js;
+var blocked_classes;
+var blocked_ids;
+var blocked_adunit;
+
+chrome.runtime.sendMessage(
+	"js",
+	function(response) {
+		blocked_js = response;
+	}
+)
+chrome.runtime.sendMessage(
+	"ids",
+	function(response) {
+		blocked_ids = response;
+	}
+)
+chrome.runtime.sendMessage(
+	"classes",
+	function(response) {
+		blocked_classes = response;
+	}
+)
+chrome.runtime.sendMessage(
+	"adunit",
+	function(response) {
+		blocked_adunit = response;
+	}
+)
+*/
+
+var blocked_js = [
+	"adPlacements",
+	"playerAds",
+	"tjPreloadAds",
+	"tjEmbeddedAdsDuration"
+];
+
+var blocked_adunit = [
+	"adunit",
+	"ytd-promoted-video-renderer",
+	"ytd-display-ad-renderer",
+	"ytd-carousel-ad-renderer",
+	"ytd-promoted-sparkles-web-renderer",
+	"ytd-compact-promoted-video-renderer"
+];
 
 //lista de teste de ids
 var blocked_ids = [
@@ -49,6 +100,8 @@ var blocked_ids = [
 	"ADSLOT_2",
 	"ADS_2",
 	"ADV120x90",
+	"ytd-promoted-video-renderer",
+	"style-scope ytd-promoted-sparkles-text-search-renderer",
 	"ADVTRIGHT1",
 	"ADV_VIDEOBOX_2_CNT",
 	"ADVleaderboard",
@@ -57,12 +110,14 @@ var blocked_ids = [
 	"AD_468x60",
 	"AD_CONTROL_22",
 	"AD_CONTROL_28",
+	"ytp-mdx-popup-dialog",
 	"AD_CONTROL_8",
 	"AD_G",
 	"AD_Top",
 	"AD_Zone",
 	"AD_banner",
 	"AD_google",
+	"html5-video-player ytp-transparent ytp-exp-bottom-control-flexbox ad-created ad-showing ad-interrupting paused-mode",
 	"AD_half",
 	"AD_text",
 	"ADback",
@@ -74,9 +129,13 @@ var blocked_ids = [
 	"Ad-Container",
 	"Ad-Top",
 	"Ad160x600",
+	"ytp-ad-image",
 	"Ad300x145",
+	"style-scope ytd-popup-container",
+	"ytd-popup-container",
 	"Ad300x250",
 	"Ad3TextAd",
+	"ytd-promoted-sparkles-text-search-renderer",
 	"Ad728x90",
 	"AdAboveGame",
 	"AdArea",
@@ -635,6 +694,7 @@ var blocked_ids = [
 	"ad300-250",
 	"ad300250top",
 	"ad300X250",
+	"ytd-compact-promoted-video-renderer",
 	"ad300_250",
 	"ad300_x_250",
 	"ad300x150",
@@ -837,6 +897,8 @@ var blocked_ids = [
 	"adSpotIsland",
 	"adSqb",
 	"adSquare",
+	"ytp-ad-action-interstitial",
+	"ytp-ad-action-interstitial-background-container",
 	"adStrip",
 	"adSuperbanner",
 	"adTableCell",
@@ -1340,6 +1402,7 @@ var blocked_ids = [
 	"adlink-133",
 	"adlink-19",
 	"adlink-213",
+	"ytp-ad-image ytp-ad-action-interstitial-background",
 	"adlink-74",
 	"adlinks",
 	"adlinkws",
@@ -1652,6 +1715,7 @@ var blocked_ids = [
 	"adspaceRow",
 	"adspace_header",
 	"adspacer",
+	"video-ads ytp-ad-module",
 	"adspecial_offer_box",
 	"adsplace1",
 	"adsponsored_links_box",
@@ -1761,7 +1825,9 @@ var blocked_ids = [
 	"adv_BoxBottom",
 	"adv_Inread",
 	"adv_IntropageOvl",
+	"ytp-ad-action-interstitial-background",
 	"adv_LdbMastheadPush",
+	"ytp-ad-module",
 	"adv_Reload",
 	"adv_Skin",
 	"adv_bkg_cont",
@@ -3778,6 +3844,7 @@ var blocked_ids = [
 	"video-masthead"
 	];
 
+
 //lista de teste de classes
 var blocked_classes = [
 	"AD-POST",
@@ -4091,6 +4158,7 @@ var blocked_classes = [
 	"ad-banner-label",
 	"ad-banner-leaderboard",
 	"ad-banner-placeholder",
+	"ytp-ad-image ytp-ad-action-interstitial-background",
 	"ad-banner-top",
 	"ad-banner-wrapper",
 	"ad-bar",
@@ -4124,6 +4192,8 @@ var blocked_classes = [
 	"ad-btn",
 	"ad-button",
 	"ad-calendar",
+	"style-scope ytd-popup-container",
+	"ytd-popup-container",
 	"ad-callout",
 	"ad-caption",
 	"ad-card",
@@ -4234,6 +4304,10 @@ var blocked_classes = [
 	"ad-link",
 	"ad-links",
 	"ad-links-text",
+	"html5-video-player ytp-transparent ytp-exp-bottom-control-flexbox ad-created ad-showing ad-interrupting paused-mode",
+	"ad-created",
+	"ad-interrupting",
+	"ad-showing",
 	"ad-loaded",
 	"ad-location",
 	"ad-mad",
@@ -4798,6 +4872,7 @@ var blocked_classes = [
 	"ad_hover_href",
 	"ad_image",
 	"ad_img",
+	"ytd-promoted-sparkles-text-search-renderer",
 	"ad_island",
 	"ad_island_feedback",
 	"ad_item",
@@ -4900,6 +4975,7 @@ var blocked_classes = [
 	"ad_top1",
 	"ad_top_1",
 	"ad_top_2",
+	"ytd-promoted-video-renderer",
 	"ad_top_banner",
 	"ad_trick_header",
 	"ad_trick_left",
@@ -5046,6 +5122,7 @@ var blocked_classes = [
 	"admedrec",
 	"admessage",
 	"admiddle",
+	"style-scope ytd-promoted-sparkles-text-search-renderer",
 	"administer-ad",
 	"admodule",
 	"admpu",
@@ -5325,6 +5402,8 @@ var blocked_classes = [
 	"ads_lb",
 	"ads_leader",
 	"ads_leaderboard",
+	"ytp-ad-action-interstitial-background-container",
+	"ytd-compact-promoted-video-renderer",
 	"ads_left",
 	"ads_lr_wrapper",
 	"ads_main",
@@ -5428,6 +5507,8 @@ var blocked_classes = [
 	"adsense_top",
 	"adsense_unit",
 	"adsenseformat",
+	"ytp-ad-action-interstitial",
+	"ytp-ad-action-interstitial-background",
 	"adsensem_widget",
 	"adsenvelope",
 	"adsep",
@@ -5715,11 +5796,13 @@ var blocked_classes = [
 	"advertise-here",
 	"advertise-link",
 	"advertise-list",
+	"video-ads ytp-ad-module",
 	"advertise-top",
 	"advertiseContainer",
 	"advertiseHere",
 	"advertiseText",
 	"advertise_box",
+	"ytp-mdx-popup-dialog",
 	"advertise_here",
 	"advertise_link",
 	"advertise_txt",
@@ -5775,6 +5858,7 @@ var blocked_classes = [
 	"advertisement_728x90",
 	"advertisement__728x90",
 	"advertisement__leaderboard",
+	"ytp-ad-image",
 	"advertisement__title",
 	"advertisement_above_footer",
 	"advertisement_article_center_middle1_computer",
@@ -6723,6 +6807,7 @@ var blocked_classes = [
 	"hidden-ad",
 	"ytp-ad-persistent-progress-bar-container",
 	"video-ads ytp-ad-module",
+	"ytp-ad-module",
 	"hide-ad",
 	"hidePauseAdZone",
 	"hideStartAdZone-container",
@@ -8252,13 +8337,6 @@ var blocked_classes = [
 	"zergnet-widget__subtitle",
 	"zone-advertisement",
 	"zoneAds"
-	];	
+];
 
-var j = 0;
-setInterval(function () {
-	hideAds();
-	j++;
-	if (j == 5) {
-		clearInterval();
-	}
-},500)
+hideAds();
