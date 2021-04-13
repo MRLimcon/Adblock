@@ -1,5 +1,13 @@
 var enabled = true;
 
+//configurações de privacidade, 
+//cookies de terceiros foi mudado para essa configuração aqui
+chrome.privacy.websites.thirdPartyCookiesAllowed.set({value: false});
+chrome.privacy.websites.hyperlinkAuditingEnabled.set({value: false});
+chrome.privacy.websites.doNotTrackEnabled.set({value: true});
+chrome.privacy.websites.referrersEnabled.set({value: false});
+chrome.privacy.network.networkPredictionEnabled.set({value: false});
+
 //cada request é analizado e adicionado um listener
 chrome.webRequest.onBeforeRequest.addListener(
 	//rodando a função
@@ -20,25 +28,6 @@ chrome.webRequest.onBeforeRequest.addListener(
 				}
 			}
 		}	
-		
-		//checagem de se a url da request é a mesma da aba, para bloquear os cookies de terceiros
-		chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-			let site_tab = tabs[0].url;
-			if (site_tab.includes(domain) == true) {
-				chrome.contentSettings.cookies.set({
-				primaryPattern: "*//"+domain+"/*",
-				setting: 'allow'
-				})
-			}
-			else {
-				chrome.contentSettings.cookies.set({
-				primaryPattern: "*//"+domain+"/*",
-				setting: 'block'
-				})
-			}
-		});
-
-	
 	},
 	{urls: ["<all_urls>"]},
 	["blocking"]
@@ -70,7 +59,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 		sendResponse(sender,blocked_ids);
 	} else if (message == "adunit") {
 		sendResponse(sender,blocked_adunit);
-		alert(blocked_adunit)
 	}
 });
 */
