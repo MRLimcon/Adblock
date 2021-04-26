@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<div w3-include-html="popup.html"></div>
+
 <html>
 
   <head>
@@ -12,44 +14,51 @@
     
     <img src="tatuBlocker.png" alt="tatuBlocker" class="center">
 
-
     <h1>Tatu Blocker</h1>
 
+    <h2> Selecione para desabilitar: </h2>
+    
+    <form action="#" id="ckbxFormId" method="POST">
+      <div>
+        <input type = "checkbox" id = "bloqueioCosmetico" name = "check" value = "checkboxCosmetico">
+        <label for = "bloqueioCosmetico" style="color:white"> Bloqueios cosmeticos </label>
+      </div>
 
-    <p>
-      O Tatu Blocker &eacute um bloqueador de an&uacutencios experimental
-    </p>
+      <div>
+        <input type = "checkbox" id = "bloqueioCookies" name = "check" value = "checkboxCookies">
+        <label for = "bloqueioCookies" style="color:white"> Bloqueios cookies </label>
+      </div>
 
+      <div>
+        <input type = "checkbox" id = "bloqueioDominio" name = "check" value = "checkboxDominio">
+        <label for = "bloqueioDominio" style="color:white"> Bloqueios dominios </label>
+      </div>
+    
+      <div name="botoes">
+        <button id="botaoReset" type="reset">Resetar</button>
+        <button id="botaoSubmit" onclick="" type="submit">Salvar</button>
+      </div>
 
-    <h2>Sobre este site:</h2>
+  </form>
 
-    <select name="Sobre este site:" class="select">
+    <h2>Escolha para manipular listas de bloqueio: </h2>
+
+    <select name="Sobre este site:" class="select"> 
       <option value="Vazio"selected>Selecione uma op&ccedil&atildeo</option>
       <option value="adicionar a lista de bloqueados">adicionar a lista de bloqueados</option>
       <option value="remover da lista de bloqueados">remover da lista de bloqueados</option>
       <option value="adicionar aos favoritos">adicionar aos favoritos</option>
     </select>
 
-
-    <h2>Sobre os an&uacutencios deste site:</h2>
-
-    <select name="select" class="select">
-      <option value="Vazio" selected>Selecione uma op&ccedil&atildeo</option>
-      <option value="valor1">Valor 1</option>
-      <option value="valor2">Valor 2</option>
-      <option value="valor3">Valor 3</option>
-    </select>
-
-
     <h2>Sobre o Tatu Blocker:</h2>
 
-    <select name="select" class="select">
-      <option value="Vazio" selected>Selecione uma op&ccedil&atildeo</option>
-      <option value="valor1">Valor 1</option>
-      <option value="valor2">Valor 2</option>
-      <option value="valor3">Valor 3</option>
-    </select>
+    <p>
+      O Tatu Blocker &eacute um bloqueador de an&uacutencios experimental
+    </p>
 
   </body>
   
 </html>
+
+
+<script type="text/javascript" src="popup.js"></script>
