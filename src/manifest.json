@@ -29,7 +29,8 @@
         "38": "tatuBlocker.png"
     },
     "default_title": "Tatu Blocker",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_script": "popup.js"
 },
   "manifest_version": 2
 }
