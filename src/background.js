@@ -50,19 +50,3 @@ function scanTabs(tab) {
 
 chrome.tabs.onUpdated.addListener(scanTabs);
 chrome.tabs.onCreated.addListener(scanTabs);
-
-/*
-para enviar a mensagem para o content script: não está dando para ler o blocked_js e essas coisas
-
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-	if (message == "js") {
-		sendResponse(sender,blocked_js);
-	} else if (message == "classes") {
-		sendResponse(sender,blocked_classes);
-	} else if (message == "ids") {
-		sendResponse(sender,blocked_ids);
-	} else if (message == "adunit") {
-		sendResponse(sender,blocked_adunit);
-	}
-});
-*/
