@@ -19,7 +19,7 @@
       "blocked_parts.js", 
       "background.js", 
       "blocked_cosmetic.js",
-      "blocked_js.js",
+      "blockedjs.js",
       "script.js"
     ]
   },
