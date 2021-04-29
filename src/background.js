@@ -38,9 +38,13 @@ de conteúdo para checar o html*/
 
 function scanTabs(tab) {
 	chrome.tabs.executeScript(tab.id, {
-		file: 'script.js',
-		runAt: "document_idle",
-		allFrames: true
+		code: 'var blocked_js = ' + JSON.stringify(blocked_js) + "\n var blocked_adunit = "+ JSON.stringify(blocked_adunit) + "\n var blocked_ids = "+ JSON.stringify(blocked_ids) + "\n var blocked_classes = "+ JSON.stringify(blocked_classes)
+	}, function() {
+		chrome.tabs.executeScript(tab.id, {
+			file: 'script.js',
+			runAt: "document_idle",
+			allFrames: true
+		})
 	})
 };
 
