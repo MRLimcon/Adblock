@@ -9,6 +9,7 @@
       "webRequestBlocking", 
       "<all_urls>",
       "privacy",
+      "storage",
       "tabs", 
       "webNavigation", 
       "notifications"
