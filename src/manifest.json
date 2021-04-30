@@ -3,24 +3,23 @@
   "version": "0.1",
   "description": "Bloqueador de anúncios experimental",
   "permissions": [
-      "contentSettings",
       "cookies",
       "webRequest", 
       "webRequestBlocking", 
       "<all_urls>",
       "privacy",
+      "bookmarks",
       "storage",
       "tabs", 
-      "webNavigation", 
-      "notifications"
+      "webNavigation"
     ],
   "background": {
     "scripts": [
       "blocked_domains.js",
-      "blocked_parts.js", 
-      "background.js", 
+      "blocked_parts.js",
       "blocked_cosmetic.js",
       "blockedjs.js",
+      "background.js", 
       "script.js"
     ]
   },
