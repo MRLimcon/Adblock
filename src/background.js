@@ -1,4 +1,5 @@
 let checkBox = 0;
+let whiteList = [];
 
 //configurações de privacidade, 
 //cookies de terceiros foi mudado para essa configuração aqui
@@ -11,8 +12,34 @@ chrome.privacy.network.networkPredictionEnabled.set({value: false});
 //com o envio da mensagem pelo popup com as opções, são alteradas temporariamente as configurações
 chrome.runtime.onMessage.addListener(
 	function(message) {
-		if (message.greeting == "whiteList") {
-			//colocar as opções para whitelist, blocklist e adicionar favorito (faço depois)
+		//colocar as opções para whitelist, blocklist e adicionar favorito (faço depois)
+		if (message.greeting == 10) {
+			//window.alert(tabTitle)
+			chrome.tabs.query({
+				active: true,
+				currentWindow: true
+			}, function(tabs) {
+				chrome.bookmarks.create({
+					'title': tabs[0].title,
+					'url': tabs[0].url,
+				});
+			});
+		} else if (message.greeting == 9) {
+			chrome.tabs.query({
+				active: true,
+				currentWindow: true
+			}, function(tabs) {
+				let localBlockList = tabs[0].url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+				blocked_domains.push(localBlockList);
+			});
+		} else if (message.greeting == 8) {
+			chrome.tabs.query({
+				active: true,
+				currentWindow: true
+			}, function(tabs) {
+				let localWhitelist = tabs[0].url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+				whiteList.push(localWhitelist);
+			});
 		} else {
 			checkBox = message.greeting
 			//alterando as configurações de privacidade
@@ -44,9 +71,9 @@ chrome.webRequest.onBeforeRequest.addListener(
 			var part_check = details.url;
 			
 			//checagem e bloqueio, caso esteja nos dominios bloqueados
-			if (blocked_domains.includes(domain)) {
+			if (blocked_domains.includes(domain) && whiteList.includes(domain) == false) {
 				return {cancel: true}; 
-			} else { 
+			} else if (whiteList.includes(domain) == false) {
 				//caso não esteja, é checada se a parte do site está nas partes bloqueadas
 				for (let i = 0; i < blocked_parts.length; i++) {
 					if (part_check.includes(blocked_parts[i]) == true) {
