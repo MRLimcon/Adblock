@@ -1,87 +1,79 @@
 // ARQUIVO JS DO POPUP
+//variáveis
+let checkBox;
+let checkboxCosmetico;
+let checkboxCookies;
+let checkboxDominio;
 
-
-
-
-const init = function(){
-    //adicionando os event listener
-    document.getElementById('botaoReset');
-    botaoReset.addEventListener('click', reset);
-    document.getElementById('botaoSubmit');
-    botaoSubmit.addEventListener('click', send);
-}
-const reset = function(ev){
-}
-const send = function(ev){
-    
-    ev.stopPropagation();
-    //fazer apenas o submit
-    let fails = validate();
+//função para o botão de salvar as opções para desativar os bloqueios
+function init() {
+    checkboxCosmetico = document.getElementById('bloqueioCosmetico').checked;
+    checkboxCookies = document.getElementById('bloqueioCookies').checked;
+    checkboxDominio = document.getElementById('bloqueioDominio').checked;
+    checkBox = InputCHBX(checkboxCosmetico,checkboxCookies,checkboxDominio);
+    chrome.runtime.sendMessage(
+        {greeting: JSON.stringify(checkBox)}
+    )
 }
 
-function InputCHBX() {
-    if(chkCosme.checked && chkDomin.checked && chkCooki.checked) {
+//função para reset das opções
+function reset(){
+    checkboxCosmetico = false;
+    checkboxCookies = false;
+    checkboxDominio = false;
+    checkBox = InputCHBX(checkboxCosmetico,checkboxCookies,checkboxDominio);
+    chrome.runtime.sendMessage(
+        {greeting: JSON.stringify(checkBox)}
+    )
+}
+
+//função para o envio das respostas
+function InputCHBX(checkboxCosmetico,checkboxCookies,checkboxDominio) {
+    if(checkboxCosmetico == true && checkboxDominio == true && checkboxCookies == true) {
         return 1;
-        alert("1");
     }
-    else if(chkDomin.checked && chkCooki.checked){
+    else if(checkboxDominio == true && checkboxCookies == true ){
         return 2;
-        alert("2");
     }
-    else if(chkCosme.checked && chkDomin.checked) {
+    else if(checkboxCosmetico == true && checkboxDominio == true ) {
         return 3;
-        alert("3");
     }
-    else if(chkCosme.checked && chkCooki.checked) {
+    else if(checkboxCosmetico == true && checkboxCookies == true ) {
         return 4;
-        alert("4");
     }
-    else if(chkDomin.checked){
+    else if(checkboxDominio == true ){
         return 5;
-        alert("5");
     }
-    else if(chkCooki.checked){
+    else if(checkboxCookies == true ){
         return 6;
-        alert("6");
     }
-    else if(chkCosme.checked) {
+    else if(checkboxCosmetico == true ) {
         return 7;
-        alert("7");
     }
-
+    else {
+        return 0;
+    }
 }
 
-validate = function(ev){
-    var op=0;
-    let chkCosme = document.getElementById('bloqueioCosmetico');
-    let chkCooki = document.getElementById('bloqueioCookies');
-    let chkDomin = document.getElementById('bloqueioDominio');
-    /*  APENAS UM TESTE
-    if(chkCosme.checked && chkDomin.checked && chkCooki.checked) {
-        op == 1;    
+//função para adicionar a um blocklist ou whitelist
+function whiteBlockList() {
+    let block = document.getElementById("whiteBlockList").value;
+    if (block == "whiteList") {
+        chrome.runtime.sendMessage(
+            {greeting: JSON.stringify("whiteList")}
+        )
+    } else if (block == "blockList") {
+        chrome.runtime.sendMessage(
+            {greeting: JSON.stringify("blockList")}
+        )
+    } else if (block == "addFav") {
+        chrome.runtime.sendMessage(
+            {greeting: JSON.stringify("addFav")}
+        )
     }
-    else if(chkDomin.checked && chkCooki.checked){
-        op == 2;  
-    }
-    else if(chkCosme.checked && chkDomin.checked) {
-        op == 3;   
-    }
-    else if(chkCosme.checked && chkCooki.checked) {
-        op == 4;  
-    }
-    else if(chkDomin.checked){
-        op == 5; 
-    }
-    else if(chkCooki.checked){
-        op == 6;  
-    }
-    else if(chkCosme.checked) {
-        op == 7;    
-    }
-    */
-
 }
 
-//DAR UM JEITO DE FAZER A FUNCAO INPUTCHBX FUNCIONAR NO BACKGROUND
-
-document.addEventListener('DOMContentLoaded', init);
+//listeners de execução dos botões
+document.getElementById("botaoWhiteBlocklist").addEventListener('click', whiteBlockList);
+document.getElementById("botaoSubmit").addEventListener('click', init);
+document.getElementById("botaoReset").addEventListener('click', reset);
