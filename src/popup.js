@@ -4,6 +4,7 @@ let checkBox;
 let checkboxCosmetico;
 let checkboxCookies;
 let checkboxDominio;
+let block;
 
 //função para o botão de salvar as opções para desativar os bloqueios
 function init() {
@@ -57,18 +58,18 @@ function InputCHBX(checkboxCosmetico,checkboxCookies,checkboxDominio) {
 
 //função para adicionar a um blocklist ou whitelist
 function whiteBlockList() {
-    let block = document.getElementById("whiteBlockList").value;
+    block = document.getElementById("whiteBlockList").value;
     if (block == "whiteList") {
         chrome.runtime.sendMessage(
-            {greeting: JSON.stringify("whiteList")}
+            {greeting: JSON.stringify(8)}
         )
     } else if (block == "blockList") {
         chrome.runtime.sendMessage(
-            {greeting: JSON.stringify("blockList")}
+            {greeting: JSON.stringify(9)}
         )
     } else if (block == "addFav") {
         chrome.runtime.sendMessage(
-            {greeting: JSON.stringify("addFav")}
+            {greeting: JSON.stringify(10)}
         )
     }
 }
