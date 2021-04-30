@@ -1,4 +1,4 @@
-var enabled = true;
+let checkBox = 0;
 
 //configurações de privacidade, 
 //cookies de terceiros foi mudado para essa configuração aqui
@@ -8,26 +8,53 @@ chrome.privacy.websites.doNotTrackEnabled.set({value: true});
 chrome.privacy.websites.referrersEnabled.set({value: false});
 chrome.privacy.network.networkPredictionEnabled.set({value: false});
 
+//com o envio da mensagem pelo popup com as opções, são alteradas temporariamente as configurações
+chrome.runtime.onMessage.addListener(
+	function(message) {
+		if (message.greeting == "whiteList") {
+			//colocar as opções para whitelist, blocklist e adicionar favorito (faço depois)
+		} else {
+			checkBox = message.greeting
+			//alterando as configurações de privacidade
+			if (checkBox == 0 || checkBox == 7 || checkBox == 5 || checkBox == 3) {
+				chrome.privacy.websites.thirdPartyCookiesAllowed.set({value: false});
+				chrome.privacy.websites.hyperlinkAuditingEnabled.set({value: false});
+				chrome.privacy.websites.doNotTrackEnabled.set({value: true});
+				chrome.privacy.websites.referrersEnabled.set({value: false});
+				chrome.privacy.network.networkPredictionEnabled.set({value: false});
+			} else {
+				chrome.privacy.websites.thirdPartyCookiesAllowed.set({value: true});
+				chrome.privacy.websites.hyperlinkAuditingEnabled.set({value: true});
+				chrome.privacy.websites.doNotTrackEnabled.set({value: false});
+				chrome.privacy.websites.referrersEnabled.set({value: true});
+				chrome.privacy.network.networkPredictionEnabled.set({value: true});
+			}
+		}
+	}
+)
+
 //cada request é analizado e adicionado um listener
 chrome.webRequest.onBeforeRequest.addListener(
 	//rodando a função
 	function(details) {
-		//é pego o dominio e a url para checar o dominio (blocked_domains.js)
-		// e para bloquear parte do site (blocked_parts.js)
-		var domain = details.url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
-		var part_check = details.url;
-		
-		//checagem e bloqueio, caso esteja nos dominios bloqueados
-		if (blocked_domains.includes(domain)) {
-			return {cancel: true}; 
-		} else { 
-			//caso não esteja, é checada se a parte do site está nas partes bloqueadas
-			for (let i = 0; i < blocked_parts.length; i++) {
-				if (part_check.includes(blocked_parts[i]) == true) {
-					return {cancel: true};
+		if (checkBox == 4 || checkBox == 6 || checkBox == 7 || checkBox == 0) {
+			//é pego o dominio e a url para checar o dominio (blocked_domains.js)
+			// e para bloquear parte do site (blocked_parts.js)
+			var domain = details.url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+			var part_check = details.url;
+			
+			//checagem e bloqueio, caso esteja nos dominios bloqueados
+			if (blocked_domains.includes(domain)) {
+				return {cancel: true}; 
+			} else { 
+				//caso não esteja, é checada se a parte do site está nas partes bloqueadas
+				for (let i = 0; i < blocked_parts.length; i++) {
+					if (part_check.includes(blocked_parts[i]) == true) {
+						return {cancel: true};
+					}
 				}
 			}
-		}	
+		}
 	},
 	{urls: ["<all_urls>"]},
 	["blocking"]
@@ -37,16 +64,17 @@ chrome.webRequest.onBeforeRequest.addListener(
 de conteúdo para checar o html*/
 
 function scanTabs(tab) {
-	chrome.tabs.executeScript(tab.id, {
-		code: 'var blocked_js = ' + JSON.stringify(blocked_js) + "\n var blocked_adunit = "+ JSON.stringify(blocked_adunit) + "\n var blocked_ids = "+ JSON.stringify(blocked_ids) + "\n var blocked_classes = "+ JSON.stringify(blocked_classes)
-	}, function() {
+	if (checkBox == 2 || checkBox == 5 || checkBox == 6 || checkBox == 0) {
 		chrome.tabs.executeScript(tab.id, {
-			file: 'script.js',
-			runAt: "document_idle",
-			allFrames: true
+			code: 'var blocked_js = ' + JSON.stringify(blocked_js) + "\n var blocked_adunit = "+ JSON.stringify(blocked_adunit) + "\n var blocked_ids = "+ JSON.stringify(blocked_ids) + "\n var blocked_classes = "+ JSON.stringify(blocked_classes)
+		}, function() {
+			chrome.tabs.executeScript(tab.id, {
+				file: 'script.js',
+				runAt: "document_idle",
+				allFrames: true
+			})
 		})
-	})
+	}
 };
 
 chrome.tabs.onUpdated.addListener(scanTabs);
-chrome.tabs.onCreated.addListener(scanTabs);
