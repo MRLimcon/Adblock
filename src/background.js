@@ -31,6 +31,9 @@ chrome.runtime.onMessage.addListener(
 			}, function(tabs) {
 				let localBlockList = tabs[0].url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
 				blocked_domains.push(localBlockList);
+				if (whiteList.includes(localBlockList) == true) {
+					whiteList.splice(whiteList.indexOf(localBlockList),1);
+				}
 			});
 		} else if (message.greeting == 8) {
 			chrome.tabs.query({
