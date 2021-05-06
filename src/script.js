@@ -37,4 +37,16 @@ function hideAds() {
 	}
 }
 
+//função para pular anúncios
+function click(classe) {
+	const buttons = document.getElementsByClassName(classe);
+	for (let i = 0; i < buttons.length; i++) {
+		buttons[i].click();
+	}
+}
+
+//pular anúncios do youtube (correção desse antigo erro)
+click("ytp-ad-skip-button-text");
+click("ytp-ad-overlay-close-button");
+//e rodar a função para limpar a página
 hideAds();
